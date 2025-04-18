@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:02:02 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/17 23:25:33 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/18 08:02:35 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/time.h>
 # define PHILO 1
 # define FORK 2
 # define ERROR_CODE 0
@@ -37,8 +38,10 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
+	struct timeval		tv;
 	int					id;
 	pthread_t			thread;
+	mutex_t				m_philo;
 	long long			last_meal;
 }						t_philo;
 
@@ -51,11 +54,24 @@ typedef struct s_table
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					number_to_eat;
+	mutex_t				m_philo_number;
+	mutex_t				m_time_to_die;
+	mutex_t				m_time_to_eat;
+	mutex_t				m_time_to_sleep;
+	mutex_t				m_number_to_eat;
+	int					plates_on_table;
+	struct timeval		tv;
 }						t_table;
+
+typedef struct s_routine
+{
+	t_philo				*philo;
+	t_table				*table;
+}						t_routine;
 
 int						parse_args(int ac, char **av, t_table *table);
 int						error_handler(int ecode);
-void					*philo_routine(void *arg);
+void					*philo_routine(void *table);
 int						init_philos(t_table *table);
 int						destroy_philos(t_philo *philos);
 int						init_forks(t_table *table);
