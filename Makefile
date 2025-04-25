@@ -11,7 +11,7 @@ INCLUDE_FLAG =-I$(INCLUDES_DIR)
 VPATH = $(INCLUDES_DIR):$(SRCS_DIR):$(OBJS_DIR)
 
 H_SOURCE = philo.h
-C_SOURCE = parse.c philo.c error.c fork.c routine.c table.c utils.c time.c print_routine.c
+C_SOURCE = parse.c philo.c error.c fork.c routine.c table.c utils.c time.c print_routine.c simulation.c
 
 MAIN = main.c
 

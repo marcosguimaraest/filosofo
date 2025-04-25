@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:41:23 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 12:40:30 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:43:35 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,6 @@ static void	p_eat(t_philo *philo, t_table *table)
 	pthread_mutex_unlock(&table->forks[left_id].mutex);
 }
 
-// static int     end_simulation(t_routine *routine)
-// {
-//     struct timeval  tv;
-//     long long   time_now;
-    
-//     time_now = get_time_in_miliseconds(&tv) - timeval_to_miliseconds(&routine->table->tv);
-//     if ((time_now - routine->philo->last_meal) > routine->table->time_to_die)
-//     {
-//         printf("eu %d morri em %lld\n", routine->philo->id + 1, time_now);
-//         routine->table->simulation_ended = 1;
-//         return (ERROR_CODE);
-//     }
-//     return (SUCESS_CODE);
-// }
-
 void	*philo_routine(void *arg)
 {
 	t_routine	*routine;
@@ -76,11 +61,11 @@ void	*philo_routine(void *arg)
 	while (!routine->table->simulation_ended)
 	{
         p_eat(routine->philo, routine->table);
-        // if (end_simulation(routine))
-        //     return (NULL);
+        if (!end_simulation(routine->philo, routine->table))
+            return (NULL);
         p_sleep(routine->philo, routine->table);
-        // if (end_simulation(routine)) 
-        //     return (NULL);
+        if (!end_simulation(routine->philo, routine->table)) 
+            return (NULL);
         p_think(routine->philo, routine->table);
 	}
 	return (NULL);

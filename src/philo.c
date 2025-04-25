@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:16:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 12:18:20 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:29:53 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static int	init_philos_thread(t_table *table)
 		init_time(table);
 		i++;
 	}
-	usleep(200000);
 	unlock_philos(table);
 	return (SUCESS_CODE);
 }

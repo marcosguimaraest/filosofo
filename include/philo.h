@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:02:02 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 12:18:02 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 14:27:33 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,6 @@ long long				timeval_to_miliseconds(struct timeval *tv);
 int						eat(t_philo *philo, t_table *table);
 int						take_a_fork(t_philo *philo, t_table *table,
 							t_fork *fork);
+int						start_monitoring(t_table *table);
+int						end_simulation(t_philo *philo, t_table *table);
 #endif
