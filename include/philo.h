@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:02:02 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/18 08:02:35 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 12:18:02 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <unistd.h>
 # include <sys/time.h>
+# include <unistd.h>
 # define PHILO 1
 # define FORK 2
 # define ERROR_CODE 0
@@ -43,6 +43,7 @@ typedef struct s_philo
 	pthread_t			thread;
 	mutex_t				m_philo;
 	long long			last_meal;
+	int					is_eating;
 }						t_philo;
 
 typedef struct s_table
@@ -59,7 +60,7 @@ typedef struct s_table
 	mutex_t				m_time_to_eat;
 	mutex_t				m_time_to_sleep;
 	mutex_t				m_number_to_eat;
-	int					plates_on_table;
+	int					simulation_ended;
 	struct timeval		tv;
 }						t_table;
 
@@ -79,4 +80,9 @@ int						destroy_forks(t_fork *forks);
 int						init_table(t_table *table);
 int						destroy_table(t_table *table);
 void					*ft_calloc(size_t nmemb, size_t size);
+long long				get_time_in_miliseconds(struct timeval *tv);
+long long				timeval_to_miliseconds(struct timeval *tv);
+int						eat(t_philo *philo, t_table *table);
+int						take_a_fork(t_philo *philo, t_table *table,
+							t_fork *fork);
 #endif

@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:08:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/18 07:25:58 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 12:34:10 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,20 @@ int main(int ac, char **av)
         if (!parse_args(ac, av, &table))
             return (error_handler(PARSE_CODE));
         init_table(&table);
+        usleep(200);
         while (i < table.philo_number)
         {
-            // printf("i: %d\n", i);
-            gettimeofday(&tv, NULL);
-            time_now = ((long long) tv.tv_sec) * 1000;
-            // pthread_mutex_lock(&table.philos[i].m_philo);
-            if ((time_now - table.philos[i].last_meal) > (table.time_to_die + table.time_to_sleep + table.time_to_eat))
+            time_now = get_time_in_miliseconds(&tv) - timeval_to_miliseconds(&table.tv);
+            // printf("time_now(%lld) - philo[%d] last meal(%lld)\n", time_now, i + 1, table.philos[i].last_meal);
+            if ((time_now - table.philos[i].last_meal) > (table.time_to_die) && !table.philos[i].is_eating)
             {
-                printf("%lld %d is dead\n time-now - lastmeal: %lld || time_to_die + eat: %d", time_now, i + 1, (time_now - table.philos[i].last_meal), (table.time_to_die + table.time_to_sleep + table.time_to_eat));
+                // printf("time now(%lld) - last_meal(%lld): %lld\n",time_now,table.philos[i].last_meal, (time_now - table.philos[i].last_meal));
+                table.simulation_ended = 1;
+                usleep(200);
+                printf("%lld %d died\n", time_now, i + 1);
+                // printf("time-now(%lld) - lastmeal(%lld): %lld || time_to_die: %d\n", time_now, table.philos[i].last_meal, (time_now - table.philos[i].last_meal), table.time_to_die);
                 exit(1);
             }
-            // pthread_mutex_unlock(&table.philos[i].m_philo);
             i++;
             if (i == table.philo_number)
                 i = 0;

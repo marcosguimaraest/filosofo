@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:15:14 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/18 06:32:26 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 12:11:26 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int init_table(t_table *table)
 {
     int status;
 
-    table->plates_on_table = 0;
     status = init_forks(table);
     if (status != SUCESS_CODE)
         return (status);
+    table->simulation_ended = 0;
     status = init_philos(table);
     if (status != SUCESS_CODE)
         return (status);
