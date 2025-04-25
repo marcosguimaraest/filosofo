@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:41:11 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 12:40:45 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:48:27 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int eat(t_philo *philo, t_table *table)
         philo->is_eating = 1;
         printf("%lld %d is eating\n", time, philo->id + 1);
         usleep(table->time_to_eat * 1000);
+        philo->is_eating = 0;
+        philo->times_eat++;
         return (SUCESS_CODE);
     }
     return (ERROR_CODE);

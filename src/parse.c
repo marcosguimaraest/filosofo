@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:09:24 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/17 23:06:51 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:21:14 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	parse_args(int ac, char **av, t_table *table)
 	table->time_to_eat = ft_atoi(av[3]);
 	table->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
-		table->time_to_die = ft_atoi(av[5]);
+		table->number_to_eat = ft_atoi(av[5]);
 	else
 		table->number_to_eat = -1;
 	return (SUCESS_CODE);

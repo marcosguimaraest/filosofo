@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:02:02 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 14:27:33 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:12:20 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ typedef struct s_philo
 	mutex_t				m_philo;
 	long long			last_meal;
 	int					is_eating;
+	int					times_eat;
 }						t_philo;
 
 typedef struct s_table
 {
 	t_fork				*forks;
 	t_philo				*philos;
+	pthread_t			t_monitor_death;
+	pthread_t			t_monitor_eat;
 	int					philo_number;
 	int					time_to_die;
 	int					time_to_eat;
@@ -74,7 +77,7 @@ int						parse_args(int ac, char **av, t_table *table);
 int						error_handler(int ecode);
 void					*philo_routine(void *table);
 int						init_philos(t_table *table);
-int						destroy_philos(t_philo *philos);
+int						destroy_philos(t_table *table);
 int						init_forks(t_table *table);
 int						destroy_forks(t_fork *forks);
 int						init_table(t_table *table);
@@ -85,6 +88,6 @@ long long				timeval_to_miliseconds(struct timeval *tv);
 int						eat(t_philo *philo, t_table *table);
 int						take_a_fork(t_philo *philo, t_table *table,
 							t_fork *fork);
-int						start_monitoring(t_table *table);
+int						init_monitors(t_table *table);
 int						end_simulation(t_philo *philo, t_table *table);
 #endif

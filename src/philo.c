@@ -6,15 +6,26 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:16:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 14:29:53 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:12:06 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	destroy_philos(t_philo *philos)
+int	destroy_philos(t_table *table)
 {
-	(void)philos;
+	int	i;
+
+	i = 0;
+	if (table->philos)
+	{
+		while (i < table->philo_number)
+		{
+			pthread_mutex_destroy(&table->philos[i].m_philo);
+			free(&table->philos[i]);
+			i++;
+		}
+	}
 	return (SUCESS_CODE);
 }
 static int	unlock_philos(t_table *table)
@@ -52,9 +63,6 @@ static int	init_philos_thread(t_table *table)
 		pthread_mutex_lock(&table->philos[i].m_philo);
 		pthread_create(&table->philos[i].thread, NULL, philo_routine,
 				&routine[i]);
-		// if (pthread_create(&table->philos[i].thread, NULL, philo_routine,
-		// 		&routine) != 0)
-		// 	return (THREAD_CODE);
 		init_time(table);
 		i++;
 	}
@@ -73,8 +81,8 @@ int	init_philos(t_table *table)
 	{
 		table->philos[i].id = i;
 		table->philos[i].is_eating = 0;
+		table->philos[i].times_eat = 0;
 		pthread_mutex_init(&table->philos[i].m_philo, NULL);
-		// printf("philo %d criado %ld\n", i, table->philos[i].tv.tv_sec);
 		i++;
 	}
 	return (init_philos_thread(table));

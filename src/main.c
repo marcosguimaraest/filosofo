@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:08:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 14:26:55 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:15:27 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int main(int ac, char **av)
         if (!parse_args(ac, av, &table))
             return (error_handler(PARSE_CODE));
         init_table(&table);
-        start_monitoring(&table);
+        init_monitors(&table);
+        while (1)
+            ;
     }
     else {
         error_handler(ARG_ERROR);

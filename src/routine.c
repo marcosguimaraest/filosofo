@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:41:23 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 14:43:35 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:48:25 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	p_eat(t_philo *philo, t_table *table)
     else
         left_id = philo->id - 1;
     right_id = philo->id;
-	take_a_fork(philo, table, &table->forks[left_id]);
+	take_a_fork(philo, table, &table->forks[left_id]);  
     take_a_fork(philo, table, &table->forks[right_id]);
     eat(philo, table);
 	pthread_mutex_unlock(&table->forks[right_id].mutex);
@@ -56,7 +56,7 @@ void	*philo_routine(void *arg)
 	routine = (t_routine *)arg;
     pthread_mutex_lock(&routine->philo->m_philo);
     if (routine->philo->id % 2 == 0)
-        usleep(200);
+        usleep(5000);
     routine->philo->last_meal = get_time_in_miliseconds(&routine->philo->tv) - timeval_to_miliseconds(&routine->table->tv);
 	while (!routine->table->simulation_ended)
 	{
