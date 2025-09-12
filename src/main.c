@@ -6,26 +6,34 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:08:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 15:15:27 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 16:30:01 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-    t_table     table;
+	t_table	table;
 
-    if (ac == 6 || ac == 5)
-    {
-        if (!parse_args(ac, av, &table))
-            return (error_handler(PARSE_CODE));
-        init_table(&table);
-        init_monitors(&table);
-        while (1)
-            ;
-    }
-    else {
-        error_handler(ARG_ERROR);
-    }   
+	if (ac == 6 || ac == 5)
+	{
+		if (!parse_args(ac, av, &table))
+			return (error_handler(PARSE_CODE));
+		init_table(&table);
+		while (1)
+		{
+			pthread_mutex_lock(&table.m_simulation_ended);
+			if (table.simulation_ended == 1)
+			{
+				destroy_table(&table);
+				break ;
+			}
+			pthread_mutex_unlock(&table.m_simulation_ended);
+		}
+	}
+	else
+	{
+		error_handler(ARG_ERROR);
+	}
 }

@@ -6,31 +6,32 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:16:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/04/25 18:12:06 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:51:02 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	destroy_philos(t_table *table)
+int	destroy_philos(t_philo *philos, int len)
 {
 	int	i;
 
 	i = 0;
-	if (table->philos)
+	if (!philos)
+		return (ERROR_CODE);
+	while (i < len)
 	{
-		while (i < table->philo_number)
-		{
-			pthread_mutex_destroy(&table->philos[i].m_philo);
-			free(&table->philos[i]);
-			i++;
-		}
+		pthread_mutex_destroy(&philos[i].m_philo);
+		pthread_detach(philos[i].thread);
+		free(&philos[i]);
+		i++;
 	}
 	return (SUCESS_CODE);
 }
+
 static int	unlock_philos(t_table *table)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (i < table->philo_number)
@@ -40,13 +41,14 @@ static int	unlock_philos(t_table *table)
 		i++;
 	}
 	return (SUCESS_CODE);
-}	
+}
 
 static int	init_time(t_table *table)
 {
-	gettimeofday(&table->tv, NULL);	
+	gettimeofday(&table->tv, NULL);
 	return (SUCESS_CODE);
 }
+
 static int	init_philos_thread(t_table *table)
 {
 	int			i;
@@ -55,23 +57,25 @@ static int	init_philos_thread(t_table *table)
 	i = 0;
 	while (i < table->philo_number)
 	{
-		routine = (t_routine *) ft_calloc(table->philo_number, sizeof(t_routine));
+		routine = (t_routine *)ft_calloc(table->philo_number,
+				sizeof(t_routine));
 		if (!routine)
 			return (ALLOC_CODE);
 		routine[i].philo = &table->philos[i];
 		routine[i].table = table;
 		pthread_mutex_lock(&table->philos[i].m_philo);
 		pthread_create(&table->philos[i].thread, NULL, philo_routine,
-				&routine[i]);
+			&routine[i]);
 		init_time(table);
 		i++;
 	}
 	unlock_philos(table);
 	return (SUCESS_CODE);
 }
+
 int	init_philos(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	table->philos = (t_philo *)ft_calloc(table->philo_number, sizeof(t_philo));
