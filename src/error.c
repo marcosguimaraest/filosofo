@@ -6,16 +6,11 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:10:16 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 14:28:32 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:51:39 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	destroy_all(void)
-{
-	printf("Destroy all");
-}
 
 static void	print_strerr(char *s)
 {
@@ -23,7 +18,7 @@ static void	print_strerr(char *s)
 		write(STDERR_FILENO, &(*(s++)), 1);
 }
 
-int	error_handler(int ecode)
+int			error_handler(int ecode)
 {
 	if (ecode == PARSE_CODE)
 		print_strerr("Parse error\n");
@@ -37,6 +32,5 @@ int	error_handler(int ecode)
 		print_strerr("Mutex error\n");
 	else if (ecode == ARG_ERROR)
 		print_strerr("Argument number error\n");
-	destroy_all();
 	return (ecode);
 }

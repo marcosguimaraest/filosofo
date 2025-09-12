@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:50:26 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 15:53:39 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:51:45 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	destroy_forks(t_fork *forks, int len)
 		return (ERROR_CODE);
 	while (i < len)
 	{
-			
-		pthread_mutex_destroy(&forks[i].mutex);	
-		free(&forks[i++]);
+		pthread_mutex_destroy(&forks[i].mutex);
+		i++;
 	}
+	free(forks);
 	return (SUCESS_CODE);
 }
 

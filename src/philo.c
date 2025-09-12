@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:16:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 14:51:02 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:51:44 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,9 @@ int	destroy_philos(t_philo *philos, int len)
 	while (i < len)
 	{
 		pthread_mutex_destroy(&philos[i].m_philo);
-		pthread_detach(philos[i].thread);
-		free(&philos[i]);
 		i++;
 	}
-	return (SUCESS_CODE);
-}
-
-static int	unlock_philos(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->philo_number)
-	{
-		pthread_mutex_unlock(&table->philos[i].m_philo);
-		usleep(100);
-		i++;
-	}
-	return (SUCESS_CODE);
-}
-
-static int	init_time(t_table *table)
-{
-	gettimeofday(&table->tv, NULL);
+	free(philos);
 	return (SUCESS_CODE);
 }
 
@@ -57,19 +36,14 @@ static int	init_philos_thread(t_table *table)
 	i = 0;
 	while (i < table->philo_number)
 	{
-		routine = (t_routine *)ft_calloc(table->philo_number,
-				sizeof(t_routine));
+		routine = (t_routine *)ft_calloc(1, sizeof(t_routine));
 		if (!routine)
 			return (ALLOC_CODE);
-		routine[i].philo = &table->philos[i];
-		routine[i].table = table;
-		pthread_mutex_lock(&table->philos[i].m_philo);
-		pthread_create(&table->philos[i].thread, NULL, philo_routine,
-			&routine[i]);
-		init_time(table);
+		routine->philo = &table->philos[i];
+		routine->table = table;
+		pthread_create(&table->philos[i].thread, NULL, philo_routine, routine);
 		i++;
 	}
-	unlock_philos(table);
 	return (SUCESS_CODE);
 }
 
@@ -86,6 +60,7 @@ int	init_philos(t_table *table)
 		table->philos[i].id = i;
 		table->philos[i].is_eating = 0;
 		table->philos[i].times_eat = 0;
+		table->philos[i].last_meal = 0;
 		pthread_mutex_init(&table->philos[i].m_philo, NULL);
 		i++;
 	}

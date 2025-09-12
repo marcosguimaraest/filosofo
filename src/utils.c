@@ -6,11 +6,12 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:37:33 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 14:35:47 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:51:38 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdlib.h>
 
 static void	*ft_memset(void *str, int c, size_t n)
 {

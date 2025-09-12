@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:09:24 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 14:25:27 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:51:40 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static int	ft_atoi(const char *s)
 	i = 0;
 	result = 0;
 	signal = 1;
-	while (s[i] && (s[i] == ' ' || s[i] == '\f' || s[i] == '\r' || s[i] == '\n'
-			|| s[i] == '\t' || s[i] == '\v'))
+	while (s[i] && (s[i] == ' ' || s[i] == '\f' || s[i] == '\r'
+			|| s[i] == '\n' || s[i] == '\t' || s[i] == '\v'))
 		i++;
 	if (s[i] == '+' || s[i] == '-')
 	{
@@ -45,28 +45,30 @@ static int	ft_maxint(const char *s)
 	int			signal;
 	long long	result;
 
-	i = -1;
+	i = 0;
 	result = 0;
 	signal = 1;
-	while (s[i] && (s[i] == ' ' || s[i] == '\f' || s[i] == '\r' || s[i] == '\n'
-			|| s[i] == '\t' || s[i] == '\v'))
+	while (s[i] && (s[i] == ' ' || s[i] == '\f' || s[i] == '\r'
+			|| s[i] == '\n' || s[i] == '\t' || s[i] == '\v'))
 		i++;
 	if (s[i] == '+' || s[i] == '-')
 	{
-		if (s[i++] == '-')
+		if (s[i] == '-')
 			signal = -1;
+		i++;
 	}
 	while (s[i] && (s[i] >= '0' && s[i] <= '9'))
 	{
-		result = (result * 10) + (s[i++] - '0');
-		if ((result * signal > (long long)INT_MAX) || (result
-				* signal) < (long long)INT_MIN)
+		result = (result * 10) + (s[i] - '0');
+		if ((result * signal > (long long)INT_MAX)
+			|| ((result * signal) < (long long)INT_MIN))
 			return (-1);
+		i++;
 	}
 	return (1);
 }
 
-int	parse_args(int ac, char **av, t_table *table)
+int			parse_args(int ac, char **av, t_table *table)
 {
 	int	i;
 
