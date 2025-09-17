@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:08:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 16:30:01 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:17:39 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_table	table;
 
@@ -26,11 +26,12 @@ int	main(int ac, char **av)
 			pthread_mutex_lock(&table.m_simulation_ended);
 			if (table.simulation_ended == 1)
 			{
-				destroy_table(&table);
+				pthread_mutex_unlock(&table.m_simulation_ended);
 				break ;
 			}
 			pthread_mutex_unlock(&table.m_simulation_ended);
 		}
+		destroy_table(&table);
 	}
 	else
 	{

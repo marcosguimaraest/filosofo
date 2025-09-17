@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:50:26 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 15:53:39 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:17:39 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	destroy_forks(t_fork *forks, int len)
+int				destroy_forks(t_fork *forks, int len)
 {
 	int	i;
 
@@ -21,14 +21,14 @@ int	destroy_forks(t_fork *forks, int len)
 		return (ERROR_CODE);
 	while (i < len)
 	{
-			
-		pthread_mutex_destroy(&forks[i].mutex);	
-		free(&forks[i++]);
+		pthread_mutex_destroy(&forks[i].mutex);
+		i++;
 	}
+	/* array memory should be freed by caller */
 	return (SUCESS_CODE);
 }
 
-int	init_forks(t_table *table)
+int				init_forks(t_table *table)
 {
 	int	i;
 
