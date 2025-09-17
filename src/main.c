@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 20:08:51 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/17 14:17:39 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:20:47 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int				main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_table	table;
 
@@ -34,7 +34,6 @@ int				main(int ac, char **av)
 		destroy_table(&table);
 	}
 	else
-	{
 		error_handler(ARG_ERROR);
-	}
+	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:41:23 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/17 20:01:19 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:36:21 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void		p_sleep(t_philo *philo, t_table *table)
+static void	p_sleep(t_philo *philo, t_table *table)
 {
 	long long	time;
 	int			end;
@@ -31,7 +31,7 @@ static void		p_sleep(t_philo *philo, t_table *table)
 	}
 }
 
-static void		p_think(t_philo *philo, t_table *table)
+static void	p_think(t_philo *philo, t_table *table)
 {
 	long long	time;
 	int			end;
@@ -49,91 +49,64 @@ static void		p_think(t_philo *philo, t_table *table)
 	}
 }
 
-static int		get_end(t_table *table)
+static void	lock_left_first(t_philo *philo, t_table *table, int left_id,
+		int *l_locked)
 {
-	int	end;
+	int	ok;
 
-	pthread_mutex_lock(&table->m_simulation_ended);
-	end = table->simulation_ended;
-	pthread_mutex_unlock(&table->m_simulation_ended);
-	return (end);
+	ok = take_a_fork(philo, table, &table->forks[left_id]);
+	if (ok == SUCESS_CODE)
+		*l_locked = 1;
 }
 
-static void		p_eat(t_philo *philo, t_table *table)
+static void	p_eat(t_philo *philo, t_table *table)
 {
-	int			left_id;
-	int			right_id;
-	int			l_locked;
-	int			r_locked;
-	int			ok;
+	int	left_id;
+	int	right_id;
+	int	l_locked;
+	int	r_locked;
 
 	l_locked = 0;
 	r_locked = 0;
-	if (philo->id == 0)
-		left_id = table->philo_number - 1;
-	else
-		left_id = philo->id - 1;
+	left_id = get_left_id(table->philo_number, philo->id);
 	right_id = philo->id;
 	if (left_id == right_id)
 	{
-		ok = take_a_fork(philo, table, &table->forks[left_id]);
-		if (ok == SUCESS_CODE)
-		{
-			usleep(table->time_to_die * 1000);
-			pthread_mutex_unlock(&table->forks[left_id].mutex);
-		}
+		single_philo_block(philo, table, left_id);
 		return ;
 	}
-	ok = take_a_fork(philo, table, &table->forks[left_id]);
-	if (ok == SUCESS_CODE)
-		l_locked = 1;
-	else
-		return ;
-	if (get_end(table))
-		goto cleanup;
-	ok = take_a_fork(philo, table, &table->forks[right_id]);
-	if (ok == SUCESS_CODE)
+	lock_left_first(philo, table, left_id, &l_locked);
+	if (!l_locked || get_end_flag(table))
+		return (cleanup_locks(table, left_id, -1, l_locked));
+	if (take_a_fork(philo, table, &table->forks[right_id]) == SUCESS_CODE)
 		r_locked = 1;
-	else
-		goto cleanup;
-	if (get_end(table))
-		goto cleanup;
-	ok = eat(philo, table);
-cleanup:
-	if (r_locked)
-		pthread_mutex_unlock(&table->forks[right_id].mutex);
-	if (l_locked)
-		pthread_mutex_unlock(&table->forks[left_id].mutex);
-	(void)ok;
+	if (!r_locked || get_end_flag(table))
+		return (cleanup_locks(table, left_id, right_id, l_locked));
+	eat(philo, table);
+	cleanup_locks(table, left_id, right_id, l_locked);
 }
 
-void			*philo_routine(void *arg)
+void	*philo_routine(void *arg)
 {
-	t_routine	*routine;
-	int			end;
+	t_routine	*r;
 
-	routine = (t_routine *)arg;
-	if (routine->philo->id % 2 == 0)
+	r = (t_routine *)arg;
+	if (r->philo->id % 2 == 0)
 		usleep(5000);
-	pthread_mutex_lock(&routine->philo->m_philo);
-	routine->philo->last_meal = get_time_in_miliseconds(&routine->philo->tv)
-		- timeval_to_miliseconds(&routine->table->tv);
-	pthread_mutex_unlock(&routine->philo->m_philo);
-	while (1)
+	pthread_mutex_lock(&r->philo->m_philo);
+	r->philo->last_meal = get_time_in_miliseconds(&r->philo->tv)
+		- timeval_to_miliseconds(&r->table->tv);
+	pthread_mutex_unlock(&r->philo->m_philo);
+	while (!get_end_flag(r->table))
 	{
-		pthread_mutex_lock(&routine->table->m_simulation_ended);
-		end = routine->table->simulation_ended;
-		pthread_mutex_unlock(&routine->table->m_simulation_ended);
-		if (end)
+		p_eat(r->philo, r->table);
+		if (!end_simulation(r->philo, r->table))
 			break ;
-		p_eat(routine->philo, routine->table);
-		if (!end_simulation(routine->philo, routine->table))
+		p_sleep(r->philo, r->table);
+		if (!end_simulation(r->philo, r->table))
 			break ;
-		p_sleep(routine->philo, routine->table);
-		if (!end_simulation(routine->philo, routine->table))
-			break ;
-		p_think(routine->philo, routine->table);
+		p_think(r->philo, r->table);
 	}
-	free(routine);
+	free(r);
 	return (NULL);
 }

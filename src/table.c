@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:15:14 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/17 14:45:38 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:21:39 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int				destroy_table(t_table *table)
+int	destroy_table(t_table *table)
 {
 	if (!table)
 		return (ERROR_CODE);
@@ -34,11 +34,10 @@ int				destroy_table(t_table *table)
 	return (SUCESS_CODE);
 }
 
-int				init_table(t_table *table)
+int	init_table(t_table *table)
 {
 	int	status;
 
-	/* init shared mutexes before any threads start */
 	if (pthread_mutex_init(&table->m_print, NULL) != 0
 		|| pthread_mutex_init(&table->m_philo_number, NULL) != 0
 		|| pthread_mutex_init(&table->m_number_to_eat, NULL) != 0

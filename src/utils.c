@@ -6,7 +6,7 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 22:37:33 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/12 14:35:47 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:21:44 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	*ft_memset(void *str, int c, size_t n)
 	size_t			i;
 	unsigned char	*s;
 
-	s = (unsigned char *) str;
+	s = (unsigned char *)str;
 	i = 0;
 	while (i < n)
 		s[i++] = c;

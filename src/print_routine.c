@@ -6,13 +6,13 @@
 /*   By: mguimara <mguimara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:41:11 by mguimara          #+#    #+#             */
-/*   Updated: 2025/09/17 19:58:12 by mguimara         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:21:26 by mguimara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int				take_a_fork(t_philo *philo, t_table *table, t_fork *fork)
+int	take_a_fork(t_philo *philo, t_table *table, t_fork *fork)
 {
 	long long	time;
 	int			end;
@@ -23,7 +23,6 @@ int				take_a_fork(t_philo *philo, t_table *table, t_fork *fork)
 	if (end)
 		return (ERROR_CODE);
 	pthread_mutex_lock(&fork->mutex);
-	/* re-check after acquiring the fork to avoid post-death prints */
 	pthread_mutex_lock(&table->m_simulation_ended);
 	end = table->simulation_ended;
 	pthread_mutex_unlock(&table->m_simulation_ended);
@@ -40,7 +39,7 @@ int				take_a_fork(t_philo *philo, t_table *table, t_fork *fork)
 	return (SUCESS_CODE);
 }
 
-int				eat(t_philo *philo, t_table *table)
+int	eat(t_philo *philo, t_table *table)
 {
 	long long	time;
 	int			end;
